@@ -95,7 +95,9 @@ window.onload = function (){
 		var iHeight = document.documentElement.clientHeight;
 		var iWidth = document.documentElement.offsetWidth;
 		var iTop = window.pageYOffset;
+		var sbnh = squarebtnwrap.offsetHeight;
 		menuWrap.style.top =window.pageYOffset + 'px';
+		squarebtnwrap.style.top = window.pageYOffset+iHeight+sbnh +'px';
 		mask.style.top = window.pageYOffset + 'px';	
 		if(peoplebox.style.display == 'block'){
 			textsqmask.style.height = iHeight +'px';
@@ -103,6 +105,7 @@ window.onload = function (){
 			peoplebox.style.top = iTop+ 240+'px';
 			peoplebox.style.zIndex = 20; 
 		}
+		videoContainer.style.width = iWidth +'px';
 		// for(var i = 0; i < rows.length; i++){
 		// 	if(rows[i].className != 'row row3'){
 		// 		rows[i].style.height = iHeight +'px';
@@ -148,21 +151,22 @@ window.onload = function (){
 	}
 	
 	/***********************鼠标移入向下图标的效果*****************************/ 
-	squarebtnwrap.onmouseover = function (){
-		this.style.top = -5 +'px';
-		this.style.transition = '.5s';
-		this.children[0].children[0].style.backgroundColor = '#fff';
-		this.children[1].style.color = '#bfa966';
-		this.children[2].style.color = '#bfa966';
-		this.children[3].style.borderColor = '#bfa966';
-	}
-	squarebtnwrap.onmouseout = function (){
-		this.style.top = 0;
-		this.children[0].children[0].style.backgroundColor = '#bfa966';
-		this.children[1].style.color = '#fff';
-		this.children[2].style.color = '#fff';
-		this.children[3].style.borderColor = '#fff';
-	}
+	// squarebtnwrap.onmouseover = function (){
+	// 	this.style.opacity = 1;
+	// 	this.style.transition = '.6s';
+	// 	this.children[0].children[0].style.backgroundColor = '#fff';
+	// 	this.children[1].style.color = '#bfa966';
+	// 	this.children[2].style.color = '#bfa966';
+	// 	this.children[3].style.borderColor = '#bfa966';
+	// }
+	// squarebtnwrap.onmouseout = function (){
+	// 	this.style.opacity = 0;
+	// 	this.style.transition = '.6s';
+	// 	this.children[0].children[0].style.backgroundColor = '#bfa966';
+	// 	this.children[1].style.color = '#fff';
+	// 	this.children[2].style.color = '#fff';
+	// 	this.children[3].style.borderColor = '#fff';
+	// }
 
 	/*无缝轮播+数据延迟加载*/ 
 	lunbo1();
@@ -173,25 +177,27 @@ window.onload = function (){
 		for(var i = 0; i < navas.length; i++){
 			navas[i].setAttribute('index', i);
 			navas[i].onclick = function (){
+				var _this = this;
+				console.log(this.getAttribute('index'))
 				if(onoff){
 					addclass(this.getAttribute('index'));
 					onoff = false;
 					if(this.getAttribute('index') > now){
-						nmllist.style.top = 0;
-						nmllist.children[0].innerHTML = creatFn(now);
-						nmllist.children[1].innerHTML = creatFn(this.getAttribute('index'));
-						startMove(nmllist,'top',400,-nmllist.parentNode.offsetHeight,'linear');
+							nmllist.style.top = 0;
+							nmllist.children[0].innerHTML = creatFn(now);
+							nmllist.children[1].innerHTML = creatFn(_this.getAttribute('index'));
+							startMove(nmllist,'top',400,-350,'linear');
 					}else if(this.getAttribute('index') < now){
-						nmllist.style.top = -350+'px';
-						nmllist.children[0].innerHTML = creatFn(this.getAttribute('index'));
-						nmllist.children[1].innerHTML = creatFn(now);
-						startMove(nmllist,'top',400,0,'linear');
+							nmllist.style.top = -350+'px';
+							nmllist.children[0].innerHTML = creatFn(_this.getAttribute('index'));
+							nmllist.children[1].innerHTML = creatFn(now);
+							startMove(nmllist,'top',400,0,'linear');
 					}
 				}else {return};
 				now = this.getAttribute('index');
 				setTimeout(function (){
 					onoff = true;
-				},500);
+				},1000);
 			}
 		}
 		/*********************轮播向下按钮*********************************/ 
@@ -218,17 +224,19 @@ window.onload = function (){
 					next = 0;
 				}
 				addclass(next);
-				nmllist.style.top = 0;
-				nmllist.children[0].innerHTML = creatFn(now);
-				nmllist.children[1].innerHTML = creatFn(next);
-				startMove(nmllist,'top',400,-350,'linear');
-				now = next;
+					nmllist.style.top = 0;
+					nmllist.children[0].innerHTML = creatFn(now);
+					nmllist.children[1].innerHTML = creatFn(next);
+					startMove(nmllist,'top',400,-350,'linear',function (){
+
+					});
+					now = next;
 			}else {
 				return;
 			}
 			timer = setTimeout(function (){
 				onoff = true;
-			}, 500);
+			}, 1000);
 		}
 		zsleft.onclick = function (){
 			var pre = now - 1;
@@ -239,11 +247,12 @@ window.onload = function (){
 					pre = Data.length-1;
 				}
 				addclass(pre);
-				nmllist.style.top = -350 +'px';
-				nmllist.children[0].innerHTML = creatFn(pre);
-				nmllist.children[1].innerHTML = creatFn(now);
-				startMove(nmllist,'top',400,0,'linear');
-				now = pre;
+					nmllist.style.top = -350 +'px';
+					nmllist.children[0].innerHTML = creatFn(pre);
+					nmllist.children[1].innerHTML = creatFn(now);
+					startMove(nmllist,'top',400,0,'linear',function (){
+					});
+					now = pre;
 			}else {
 				return;
 			}
@@ -251,7 +260,12 @@ window.onload = function (){
 				onoff = true;
 			}, 500);
 		}
-		nmllist.children[0].innerHTML = creatFn(0);
+		nmllist.style.top = 0;
+		nmllist.children[0].innerHTML = creatFn(now);
+		nmllist.children[1].innerHTML = creatFn(1);
+		startMove(nmllist,'top',400,-350,'linear',function (){
+			wzyd(nmllist.children[1]);
+		});
 		/****************轮播图的数据渲染*************************/ 
 		function creatFn(num){
 			var str = '';
@@ -298,15 +312,25 @@ window.onload = function (){
 			var iTop = window.pageYOffset;
 			var peoplebox = $('.peoplebox')[0];
 			peoplebox.style.display = 'block';
+			peoplebox.style.opacity = '0';
 			textsqmask.style.display = 'block';
+			textsqmask.style.opacity = '0';
+			startMove(peoplebox,'opacity',400,100,'linear');
+			startMove(textsqmask,'opacity',400,60,'linear');
 			peoplebox.style.top = iTop + 240+ 'px';
 			textsqmask.style.top = iTop + 'px';
-			peoplebox.style.zIndex = 20;
+			textsqmask.style.zIndex = 30;
+			peoplebox.style.zIndex = 40;
 			peoplebox.innerHTML = peoCreat(this.index);
 			var squarejiantext = $('.squarejiantext')[0];
 			squarejiantext.onclick = function (){
-				peoplebox.style.display = 'none';
-				textsqmask.style.display = 'none';
+				startMove(peoplebox,'opacity',400,0,'linear');
+				startMove(textsqmask,'opacity',400,0,'linear');
+				setTimeout(function (){
+					textsqmask.style.display = 'none';
+					peoplebox.style.display = 'none';
+				}, 600);
+
 			}
 		};
 	}
@@ -384,23 +408,28 @@ window.onload = function (){
 			};
 		}
 		/*********************左侧导航每一项的点击事件 end**********************************/
-		squarebtnwrap.onclick = function (){
-			if(flag){
-				flag = false;
-				clearInterval(timer);
-				autoH();
-				num = 1;
-				settime(scrollH(num-1),scrollH(num));
-				tagColor(num);
-				movetxt(num);
-				setTimeout(function (){
-					flag = true;
-				}, 2000);
-			}else {
-				return;
-			}
-			window.localStorage.setItem('nub',num);
-		};
+		// squarebtnwrap.onclick = function (){
+		// 	if(flag){
+		// 		flag = false;
+		// 		clearInterval(timer);
+		// 		autoH();
+		// 		num ++;
+		// 		if(num > arr2.length){
+		// 			num = arr2.length;
+		// 			settime(scrollH(num),scrollH(num));
+		// 		}else {
+		// 			settime(scrollH(num-1),scrollH(num));
+		// 		}
+		// 		tagColor(num);
+		// 		movetxt(num);
+		// 		setTimeout(function (){
+		// 			flag = true;
+		// 		}, 2000);
+		// 	}else {
+		// 		return;
+		// 	}
+		// 	window.localStorage.setItem('nub',num);
+		// };
 
 		/*********************左侧导航向上按钮**********************************/
 		squareLt.onclick = ltFn;
@@ -434,16 +463,15 @@ window.onload = function (){
 		function gtFn(){
 			if(flag){
 				flag = false;
-				console.log(123)
 				num--;
 				clearInterval(timer);
 				autoH();
-				if(num <= 0){
-					num = 0;
-					settime(scrollH(num+1),-40);
-					
-				}else {
+				if(num >= 0){
 					settime(scrollH(num+1),scrollH(num));
+				}else {
+					flag = true;
+					num = 0;
+					return;
 				}
 				tagColor(num);
 				movetxt(num);
@@ -513,21 +541,21 @@ window.onload = function (){
 	function settime(star,end){
 			if(star < end){
 				timer = setInterval(function (){
-					window.scrollTo(0, star);
 					star+= 10;
 					if(star >= end){
 						star = end;
 						clearInterval(timer);
 					}
+					window.scrollTo(0, star);
 				}, 8);  
 			}else if(star > end){
 				timer = setInterval(function (){
-					window.scrollTo(0,star);
 					star -= 10;
-					if(star <= end){
+					if(star <= end ){
 						star = end;
 						clearInterval(timer);
 					}
+					window.scrollTo(0,star);
 				}, 8);
 			}
 
@@ -538,8 +566,6 @@ window.onload = function (){
 		for(var i = 0; i< num; i++){
 			val += arr2[i];
 		}
-		val += 10;
-
 		return val;
 	}
 	/*********************左侧导航每一项添加变色**********************************/
@@ -636,15 +662,44 @@ window.onload = function (){
 	function textMove(btm,num){
 		btm.style.bottom = num +'px';
 		btm.style.opacity = 1;
-		btm.style.transition = 1+'s';
+		btm.style.transition = .8+'s cubic-bezier(.29, 0.1, 0, 1.6)';
 	}
 	/****************内容块动画2*************************/ 
 	function textMove2(btm,num){
 		btm.style.bottom = num +'px';
 		btm.style.opacity = 0;
-		btm.style.transition = 1+'s';
+		btm.style.transition = .8+'s cubic-bezier(.29, 0.1, 0, 1.6)';
 	}
 
+	function wzyd(elem){
+
+		var nub = -1;
+		var timers = setInterval(function(){
+			nub++;
+			if(nub >= elem.children.length){
+				clearInterval(timers);
+				return;
+			}
+			elem.children[nub].style.transition = '1s';
+			elem.children[nub].style.WebkitTransition = '1s';
+			elem.children[nub].style.transform = 'translateX(0px)';
+			elem.children[nub].style.WebkitTransform = 'translateX(0px)';	
+		}, 100);
+	}
+	function wzydh(elem){
+		var nub = elem.children.length;
+		var timers = setInterval(function (){
+			nub--;
+			if(nub <=0){
+				clearInterval(timers);
+				return;
+			}
+			elem.children[nub].style.transition = '1s';
+			elem.children[nub].style.WebkitTransition = '1s';
+			elem.children[nub].style.transform = 'translateX(-1000px)';
+			elem.children[nub].style.WebkitTransform = 'translateX(-1000px)';
+		}, 70);
+	}
 
 
 
@@ -844,16 +899,5 @@ window.onload = function (){
 			20
 		 );
 	}
-	function css(obj,attr){
-		var nub = 0;
-		if(obj.currentStyle){
-			nub = parseFloat(obj.currentStyle[attr]);
-		} else { 
-			nub = parseFloat(getComputedStyle(obj)[attr]);
-		}
-		if(attr == "opacity"){
-			return Math.round(nub*100);
-		}
-		return nub;
-	}
+
 };
