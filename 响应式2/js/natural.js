@@ -39,16 +39,9 @@ window.onload = function (){
 	var transforms = $('.transforms')[0];
 	var videoContainer = $('.videoContainer')[0];
 	var row0 = $('#row0');
-	// var rows = $('.row');
-
-	// alert(window.localStorage)
-	// if(window.localStorage){
-	// 	num = window.localStorage.getItem('nub');
-	// }else {
-	// 	document.cookie = num;
-	// 	console.log(num)
-	// }
-	num = window.localStorage.getItem('nub') ;
+	if(window.localStorage){
+		num = window.localStorage.getItem('nub') ;
+	}
 	(function (){
 		num = +num;
 		if(flag){
@@ -63,12 +56,12 @@ window.onload = function (){
 		}else {
 			return;
 		}
-		window.localStorage.setItem('nub',num);
+		if(window.localStorage){
+			window.localStorage.setItem('nub',num);
+		}
 	})();
 	
-	// console.log(videoContainer)
 	window.onresize = window.onscroll =  function (){
-		// var iHeight = document.documentElement.clientHeight;
 		autoH();
 		arr2 = [
 			iH.children[0].scrollHeight+iH.children[1].scrollHeight,
@@ -78,17 +71,7 @@ window.onload = function (){
 			iH.children[6].scrollHeight+iH.children[1].scrollHeight,
 			iH.children[8].scrollHeight,
 			iH.children[9].scrollHeight+iH.children[1].scrollHeight
-		];
-		// arr2 = [
-		// 	iHeight+iH.children[1].scrollHeight,
-		// 	iHeight,
-		// 	iHeight,
-		// 	iHeight+iH.children[1].scrollHeight,
-		// 	iHeight+iH.children[1].scrollHeight,
-		// 	iHeight,
-		// 	iHeight+iH.children[1].scrollHeight
-		// ];
-		
+		];		
 	};
 	/******************js控制高度是全屏高度******************/ 
 	function autoH(){
@@ -97,7 +80,8 @@ window.onload = function (){
 		var iTop = window.pageYOffset;
 		var sbnh = squarebtnwrap.offsetHeight;
 		menuWrap.style.top =window.pageYOffset + 'px';
-		squarebtnwrap.style.top = window.pageYOffset+iHeight+sbnh +'px';
+		menuL.style.height = iHeight +'px';
+		// squarebtnwrap.style.top = window.pageYOffset+iHeight+sbnh +'px';
 		mask.style.top = window.pageYOffset + 'px';	
 		if(peoplebox.style.display == 'block'){
 			textsqmask.style.height = iHeight +'px';
@@ -106,12 +90,6 @@ window.onload = function (){
 			peoplebox.style.zIndex = 20; 
 		}
 		videoContainer.style.width = iWidth +'px';
-		// for(var i = 0; i < rows.length; i++){
-		// 	if(rows[i].className != 'row row3'){
-		// 		rows[i].style.height = iHeight +'px';
-		// 	}
-			
-		// }
 	}
 	(function (){
 		for(var i = 0; i < as.length; i++){
@@ -151,22 +129,22 @@ window.onload = function (){
 	}
 	
 	/***********************鼠标移入向下图标的效果*****************************/ 
-	// squarebtnwrap.onmouseover = function (){
-	// 	this.style.opacity = 1;
-	// 	this.style.transition = '.6s';
-	// 	this.children[0].children[0].style.backgroundColor = '#fff';
-	// 	this.children[1].style.color = '#bfa966';
-	// 	this.children[2].style.color = '#bfa966';
-	// 	this.children[3].style.borderColor = '#bfa966';
-	// }
-	// squarebtnwrap.onmouseout = function (){
-	// 	this.style.opacity = 0;
-	// 	this.style.transition = '.6s';
-	// 	this.children[0].children[0].style.backgroundColor = '#bfa966';
-	// 	this.children[1].style.color = '#fff';
-	// 	this.children[2].style.color = '#fff';
-	// 	this.children[3].style.borderColor = '#fff';
-	// }
+	squarebtnwrap.onmouseover = function (){
+		this.style.opacity = 1;
+		this.style.transition = '.6s';
+		this.children[0].children[0].style.backgroundColor = '#fff';
+		this.children[1].style.color = '#bfa966';
+		this.children[2].style.color = '#bfa966';
+		this.children[3].style.borderColor = '#bfa966';
+	}
+	squarebtnwrap.onmouseout = function (){
+		this.style.opacity = 0;
+		this.style.transition = '.6s';
+		this.children[0].children[0].style.backgroundColor = '#bfa966';
+		this.children[1].style.color = '#fff';
+		this.children[2].style.color = '#fff';
+		this.children[3].style.borderColor = '#fff';
+	}
 
 	/*无缝轮播+数据延迟加载*/ 
 	lunbo1();
@@ -178,26 +156,63 @@ window.onload = function (){
 			navas[i].setAttribute('index', i);
 			navas[i].onclick = function (){
 				var _this = this;
-				console.log(this.getAttribute('index'))
 				if(onoff){
 					addclass(this.getAttribute('index'));
 					onoff = false;
+					var liH = nmllist.children[0].offsetHeight;
 					if(this.getAttribute('index') > now){
 							nmllist.style.top = 0;
 							nmllist.children[0].innerHTML = creatFn(now);
 							nmllist.children[1].innerHTML = creatFn(_this.getAttribute('index'));
-							startMove(nmllist,'top',400,-350,'linear');
+							for(var i=0; i< nmllist.children[0].children.length; i++){
+								 nmllist.children[0].children[i].style.transform = "translateX(0px)"
+							}
+							
+							startMove(nmllist.children[0],'opacity',500,0,'linear');
+							startMove(nmllist,'top',500,-liH,'linear',function (){
+								nmllist.children[0].style.opacity = 1;
+								var n = -1;
+								var lin = nmllist.children[1].children;
+								var stimer = setInterval(function (){
+									n++;
+									if(n >= lin.length){
+										n = 0;
+										clearTimeout(stimer);
+									}
+									lin[n].style.transform = "translateX(0px)";
+									lin[n].style.transition = ".35s";
+								}, 400);
+							});
 					}else if(this.getAttribute('index') < now){
-							nmllist.style.top = -350+'px';
+							
 							nmllist.children[0].innerHTML = creatFn(_this.getAttribute('index'));
 							nmllist.children[1].innerHTML = creatFn(now);
-							startMove(nmllist,'top',400,0,'linear');
+							for(var i=0; i< nmllist.children[1].children.length; i++){
+								 nmllist.children[1].children[i].style.transform = "translateX(0px)"
+							}
+							startMove(nmllist.children[1],'opacity',500,0,'linear');
+							nmllist.style.top = -liH+'px';
+							
+							startMove(nmllist,'top',500,0,'linear',function (){
+								nmllist.children[1].style.opacity = 1;
+								var n = -1;
+								var lin = nmllist.children[0].children;
+								var stimer = setInterval(function (){
+									n++;
+									if(n >= lin.length){
+										n = 0;
+										clearTimeout(stimer);
+									}
+									lin[n].style.transform = "translateX(0px)";
+									lin[n].style.transition = ".35s";
+								}, 400);
+							});
 					}
 				}else {return};
 				now = this.getAttribute('index');
 				setTimeout(function (){
 					onoff = true;
-				},1000);
+				},2000);
 			}
 		}
 		/*********************轮播向下按钮*********************************/ 
@@ -218,17 +233,34 @@ window.onload = function (){
 		function nextFn(){
 			var next = now +1;
 			var timer = 0;
+			var liH =  nmllist.children[0].offsetHeight;
+
 			if(onoff){
 				onoff = false;
 				if(next > Data.length-1){
 					next = 0;
 				}
 				addclass(next);
-					nmllist.style.top = 0;
 					nmllist.children[0].innerHTML = creatFn(now);
 					nmllist.children[1].innerHTML = creatFn(next);
-					startMove(nmllist,'top',400,-350,'linear',function (){
-
+					for(var i=0; i< nmllist.children[0].children.length; i++){
+						 nmllist.children[0].children[i].style.transform = "translateX(0px)"
+					}
+					startMove(nmllist.children[0],'opacity',500,0,'linear');
+					nmllist.style.top = 0;
+					startMove(nmllist,'top',500,-liH,'linear',function (){
+						nmllist.children[0].style.opacity = 1;
+						var n = -1;
+						var lin = nmllist.children[1].children;
+						var stimer = setInterval(function (){
+							n++;
+							if(n >= lin.length){
+								n = 0;
+								clearTimeout(stimer);
+							}
+							lin[n].style.transform = "translateX(0px)";
+							lin[n].style.transition = ".35s";
+						}, 300);
 					});
 					now = next;
 			}else {
@@ -236,21 +268,38 @@ window.onload = function (){
 			}
 			timer = setTimeout(function (){
 				onoff = true;
-			}, 1000);
+			}, 2000);
 		}
 		zsleft.onclick = function (){
 			var pre = now - 1;
 			var timer = 0;
+			var liH =  nmllist.children[0].offsetHeight;
 			if(onoff){
 				onoff = false;
 				if(pre < 0){
 					pre = Data.length-1;
 				}
 				addclass(pre);
-					nmllist.style.top = -350 +'px';
+					nmllist.style.top = -liH +'px';
 					nmllist.children[0].innerHTML = creatFn(pre);
 					nmllist.children[1].innerHTML = creatFn(now);
-					startMove(nmllist,'top',400,0,'linear',function (){
+					startMove(nmllist.children[1],'opacity',500,0,'linear');
+					for(var i=0; i< nmllist.children[1].children.length; i++){
+						 nmllist.children[1].children[i].style.transform = "translateX(0px)"
+					}
+					startMove(nmllist,'top',500,0,'linear',function (){
+						nmllist.children[1].style.opacity = 1;
+						var n = -1;
+						var lin = nmllist.children[0].children;
+						var stimer = setInterval(function (){
+							n++;
+							if(n >= lin.length){
+								n = 0;
+								clearTimeout(stimer);
+							}
+							lin[n].style.transform = "translateX(0px)";
+							lin[n].style.transition = ".35s";
+						}, 400);
 					});
 					now = pre;
 			}else {
@@ -258,12 +307,13 @@ window.onload = function (){
 			}
 			timer = setTimeout(function (){
 				onoff = true;
-			}, 500);
+			}, 2000);
 		}
+		var liH =  nmllist.children[0].offsetHeight;
 		nmllist.style.top = 0;
 		nmllist.children[0].innerHTML = creatFn(now);
 		nmllist.children[1].innerHTML = creatFn(1);
-		startMove(nmllist,'top',400,-350,'linear',function (){
+		startMove(nmllist,'top',400,-liH,'linear',function (){
 			wzyd(nmllist.children[1]);
 		});
 		/****************轮播图的数据渲染*************************/ 
@@ -404,32 +454,38 @@ window.onload = function (){
 				}else {
 					return;
 				}
-				window.localStorage.setItem('nub',num);
+				// window.localStorage.setItem('nub',num);
+				if(window.localStorage){
+					window.localStorage.setItem('nub',num);
+				}
 			};
 		}
 		/*********************左侧导航每一项的点击事件 end**********************************/
-		// squarebtnwrap.onclick = function (){
-		// 	if(flag){
-		// 		flag = false;
-		// 		clearInterval(timer);
-		// 		autoH();
-		// 		num ++;
-		// 		if(num > arr2.length){
-		// 			num = arr2.length;
-		// 			settime(scrollH(num),scrollH(num));
-		// 		}else {
-		// 			settime(scrollH(num-1),scrollH(num));
-		// 		}
-		// 		tagColor(num);
-		// 		movetxt(num);
-		// 		setTimeout(function (){
-		// 			flag = true;
-		// 		}, 2000);
-		// 	}else {
-		// 		return;
-		// 	}
-		// 	window.localStorage.setItem('nub',num);
-		// };
+		squarebtnwrap.onclick = function (){
+			if(flag){
+				flag = false;
+				clearInterval(timer);
+				autoH();
+				num++;
+				if(num > arr2.length){
+					num = 0;
+					settime(scrollH(num),scrollH(num));
+				}else {
+					settime(scrollH(num-1),scrollH(num));
+				}
+				tagColor(num);
+				movetxt(num);
+				setTimeout(function (){
+					flag = true;
+				}, 2000);
+			}else {
+				return;
+			}
+			if(window.localStorage){
+				window.localStorage.setItem('nub',num);
+			}
+			
+		};
 
 		/*********************左侧导航向上按钮**********************************/
 		squareLt.onclick = ltFn;
@@ -456,7 +512,9 @@ window.onload = function (){
 			}else {
 				return;
 			}
-			window.localStorage.setItem('nub',num);
+			if(window.localStorage){
+				window.localStorage.setItem('nub',num);
+			}
 		};
 		/*********************左侧导航向下按钮**********************************/
 		squareGt.onclick = gtFn;
@@ -482,7 +540,9 @@ window.onload = function (){
 			}else {
 				return;
 			}
-			window.localStorage.setItem('nub',num);
+			if(window.localStorage){
+				window.localStorage.setItem('nub',num);
+			}
 		}
 		MTouch(".row").swipeDown(function (x,y){
 			if(onoff2){
@@ -533,7 +593,9 @@ window.onload = function (){
 				}else {
 					return;
 				}
-				window.localStorage.setItem('nub',num);
+				if(window.localStorage){
+					window.localStorage.setItem('nub',num);
+				}
 		};
 	}
 	};
@@ -700,10 +762,6 @@ window.onload = function (){
 			elem.children[nub].style.WebkitTransform = 'translateX(-1000px)';
 		}, 70);
 	}
-
-
-
-
 	/*********************点击人后出现的人物介绍的数据渲染**********************************/
 	function peoCreat(num){
 		var str = '';

@@ -354,7 +354,7 @@ h2 {
 	width: 100%;
 	overflow: hidden;
 }
-/*.nmllist li h3 {
+.nmllist li h3 {
 	-webkit-transform: translateX(-1000px);
 	-moz-transform: translateX(-1000px);
 	-ms-transform: translateX(-1000px);
@@ -365,7 +365,7 @@ h2 {
 	-moz-transform: translateX(-1000px);
 	-ms-transform: translateX(-1000px);
 	transform: translateX(-1000px);
-}*/
+}
 @-webkit-keyframes changcolor {
 	0% {
 		color: #8c8989;
@@ -543,10 +543,10 @@ h2 {
 	height: 120px;
 	padding-top: 40px;
 	text-align: center;
-/*	-webkit-transform: translateX(-1000px);
+	-webkit-transform: translateX(-1000px);
 	-moz-transform: translateX(-1000px);
 	-ms-transform: translateX(-1000px);
-	transform: translateX(-1000px);*/
+	transform: translateX(-1000px);
 }
 .textsq {
 	position: absolute;
@@ -754,7 +754,7 @@ h2 {
 
 @-webkit-keyframes changcolor4 {
 	0% {
-		color: #898989;
+		color: #d4d8d8;
 	}
 	50% {
 		color: #fff;
@@ -765,7 +765,7 @@ h2 {
 }
 @-moz-keyframes changcolor4 {
 	0% {
-		color: #898989;
+		color: #d4d8d8;
 	}
 	50% {
 		color: #fff;
@@ -776,7 +776,7 @@ h2 {
 }
 @-ms-keyframes changcolor4 {
 	0% {
-		color: #898989;
+		color: #d4d8d8;
 	}
 	50% {
 		color: #fff;
@@ -787,7 +787,7 @@ h2 {
 }
 @keyframes changcolor4 {
 	0% {
-		color: #898989;
+		color: #d4d8d8;
 	}
 	50% {
 		color: #fff;
@@ -989,7 +989,7 @@ h2 {
 }
 .squarebtnwrap {
 	width: 100%;
-	position: absolute;
+	position: fixed;
 	left: 0;
 	bottom: 0;
 	z-index: 28;
@@ -1017,7 +1017,7 @@ h2 {
 }
 @-webkit-keyframes changcolor6 {
 	0% {
-		color: #d5d5d5;
+		color: #BFA726;
 	}
 	50% {
 		color: #bfa966;
@@ -1028,7 +1028,7 @@ h2 {
 }
 @-moz-keyframes changcolor6 {
 	0% {
-		color: #d5d5d5;
+		color: #BFA726;
 	}
 	50% {
 		color: #bfa966;
@@ -1039,7 +1039,7 @@ h2 {
 }
 @-ms-keyframes changcolor6 {
 	0% {
-		color: #d5d5d5;
+		color: #BFA726;
 	}
 	50% {
 		color: #bfa966;
@@ -1050,7 +1050,7 @@ h2 {
 }
 @keyframes changcolor6 {
 	0% {
-		color: #d5d5d5;
+		color: #BFA726;
 	}
 	50% {
 		color: #bfa966;
